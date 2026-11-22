@@ -1,0 +1,216 @@
+<?php
+
+namespace App\Repositories\IdCard;
+
+use App\Enums\IdCardType;
+use App\Models\IdCard;
+use App\Models\Staff\Staff;
+use App\Traits\CommonHelperTrait;
+use App\Traits\ReturnFormatTrait;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Repositories\IdCard\IdCardInterface;
+use App\Models\StudentInfo\SessionClassStudent;
+
+class IdCardRepository implements IdCardInterface
+{
+    use ReturnFormatTrait, CommonHelperTrait;
+
+    private $model;
+
+    public function __construct(IdCard $model)
+    {
+        $this->model = $model;
+    }
+
+    public function all()
+    {
+        return $this->model->orderByDesc('id')->get();
+    }
+
+    public function getPaginateAll()
+    {
+        return $this->model::latest()->orderByDesc('id')->paginate(10);
+    }
+
+    public function search($request)
+    {
+        $rows = $this->model::query();
+        if($request->class != "") {
+            $rows = $rows->where('classes_id', $request->class);
+        }
+        if($request->section != "") {
+            $rows = $rows->where('section_id', $request->section);
+        }
+        if($request->subject != "") {
+            $rows = $rows->where('subject_id', $request->subject);
+        }
+        return $rows->paginate(10);
+    }
+
+    public function store($request)
+    {
+        DB::beginTransaction();
+        try {
+            $row                     = new $this->model;
+            $row->title              = $request->title;
+            $row->card_type          = $request->card_type ?? IdCardType::STUDENT;
+            $row->expired_date       = $this->normalizeExpiredDate($request);
+            $row->frontside_bg_image       = $request->hasFile('frontside_bg_image')
+                ? $this->UploadImageCreate($request->file('frontside_bg_image'), 'backend/uploads/idcards')
+                : null;
+            $row->backside_bg_image        = $request->hasFile('backside_bg_image')
+                ? $this->UploadImageCreate($request->file('backside_bg_image'), 'backend/uploads/idcards')
+                : null;
+
+            $row->signature     = $request->hasFile('signature')
+                ? $this->UploadImageCreate($request->file('signature'), 'backend/uploads/idcards')
+                : null;
+            $row->qr_code       = $request->hasFile('qr_code')
+                ? $this->UploadImageCreate($request->file('qr_code'), 'backend/uploads/idcards')
+                : null;
+
+            $row->backside_description    = $request->backside_description;
+
+            $row->admission_no            = $request->admission_no ==  'on' ? true:false;
+            $row->roll_no                 = $request->roll_no ==  'on' ? true:false;
+            $row->student_name            = $request->student_name ==  'on' ? true:false;
+            $row->class_name              = $request->class_name ==  'on' ? true:false;
+            $row->section_name            = $request->section_name ==  'on' ? true:false;
+            $row->blood_group             = $request->blood_group ==  'on' ? true:false;
+            $row->dob                     = $request->dob ==  'on' ? true:false;
+            
+            $row->save();
+
+            DB::commit();
+
+            return $this->responseWithSuccess(___('alert.created_successfully'), []);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('IdCard store failed', [
+                'message' => $th->getMessage(),
+                'title' => $request->input('title'),
+                'card_type' => $request->input('card_type'),
+            ]);
+
+            return $this->responseWithError(___('alert.something_went_wrong_please_try_again'), []);
+        }
+    }
+
+    public function show($id)
+    {
+        return $this->model->find($id);
+    }
+
+    public function update($request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $row                     = $this->model->find($id);
+            $row->title              = $request->title;
+            $row->card_type          = $request->card_type ?? IdCardType::STUDENT;
+            $row->expired_date       = $this->normalizeExpiredDate($request);
+            $row->frontside_bg_image       = $request->hasFile('frontside_bg_image')
+                ? $this->UploadImageUpdate($request->file('frontside_bg_image'), 'backend/uploads/idcards', $row->frontside_bg_image)
+                : $row->frontside_bg_image;
+            $row->backside_bg_image        = $request->hasFile('backside_bg_image')
+                ? $this->UploadImageUpdate($request->file('backside_bg_image'), 'backend/uploads/idcards', $row->backside_bg_image)
+                : $row->backside_bg_image;
+
+            $row->signature     = $request->hasFile('signature')
+                ? $this->UploadImageUpdate($request->file('signature'), 'backend/uploads/idcards', $row->signature)
+                : $row->signature;
+            $row->qr_code       = $request->hasFile('qr_code')
+                ? $this->UploadImageUpdate($request->file('qr_code'), 'backend/uploads/idcards', $row->qr_code)
+                : $row->qr_code;
+
+            $row->backside_description    = $request->backside_description;
+
+            $row->admission_no            = $request->admission_no ==  'on' ? true:false;
+            $row->roll_no                 = $request->roll_no ==  'on' ? true:false;
+            $row->student_name            = $request->student_name ==  'on' ? true:false;
+            $row->class_name              = $request->class_name ==  'on' ? true:false;
+            $row->section_name            = $request->section_name ==  'on' ? true:false;
+            $row->blood_group             = $request->blood_group ==  'on' ? true:false;
+            $row->dob                     = $request->dob ==  'on' ? true:false;
+            
+            $row->save();
+            
+            DB::commit();
+            return $this->responseWithSuccess(___('alert.updated_successfully'), []);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->responseWithError(___('alert.something_went_wrong_please_try_again'), []);
+        }
+    }
+
+    public function destroy($id)
+    {
+        DB::beginTransaction();
+        try {
+
+            $row = $this->model->find($id);
+            $this->UploadImageDelete($row->frontside_bg_image);
+            $this->UploadImageDelete($row->backside_bg_image);
+            $this->UploadImageDelete($row->signature);
+            $this->UploadImageDelete($row->qr_code);
+            $row->delete();
+
+            DB::commit();
+            return $this->responseWithSuccess(___('alert.deleted_successfully'), []);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->responseWithError(___('alert.something_went_wrong_please_try_again'), []);
+        }
+    }
+
+    public function generateSearch($request)
+    {
+
+        try {
+
+            $data['idcard'] = $this->model->find($request->id_card);
+
+            if (! $data['idcard']) {
+                return $this->responseWithError(___('alert.something_went_wrong_please_try_again'), []);
+            }
+
+            $cardType = $data['idcard']->card_type ?? IdCardType::STUDENT;
+
+            if ($cardType === IdCardType::TEACHER) {
+                $data['students'] = collect();
+                $data['staff_members'] = Staff::query()
+                    ->active()
+                    ->with(['upload', 'designation', 'department'])
+                    ->when($request->filled('staff'), fn ($q) => $q->where('id', $request->staff))
+                    ->orderBy('first_name')
+                    ->get();
+            } else {
+                $data['staff_members'] = collect();
+                $data['students'] = SessionClassStudent::query()
+                    ->forStudentListing()
+                    ->where('session_id', setting('session'))
+                    ->where('classes_id', $request->class)
+                    ->where('section_id', $request->section)
+                    ->when($request->filled('student'), fn ($q) => $q->where('student_id', $request->student))
+                    ->get();
+            }
+
+            return $this->responseWithSuccess('', $data);
+        } catch (\Throwable $th) {
+            return $this->responseWithError(___('alert.something_went_wrong_please_try_again'), []);
+        }
+
+    }
+
+    private function normalizeExpiredDate($request): ?string
+    {
+        $value = $request->input('expired_date');
+
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return $value;
+    }
+}

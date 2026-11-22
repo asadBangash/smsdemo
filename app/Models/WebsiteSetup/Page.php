@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Models\WebsiteSetup;
+
+use App\Models\PageTranslate;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Page extends Model
+{
+    use HasFactory;
+
+
+    public function defaultTranslate()
+    {
+        $locale = request()->locale ?? app()->getLocale();
+
+        return $this->hasOne(PageTranslate::class, 'page_id')->where('locale', $locale);
+    }
+
+
+    public function translations()
+    {
+        return $this->hasMany(PageTranslate::class, 'page_id', 'id');
+    }
+
+
+}

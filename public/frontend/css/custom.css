@@ -1,0 +1,261 @@
+body {
+    -webkit-print-color-adjust: exact !important;
+}
+
+.theme_mailChimp2 form {
+    grid-template-columns: auto max-content;
+}
+
+.subscribe_message {
+    background: #004533;
+    padding: 10px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    display: inline-block;
+    font-family: "Libre Baskerville", serif;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 700;
+    padding: 13px 28px;
+    border: 1px solid transparent;
+    text-transform: capitalize;
+    display: inline-block;
+    line-height: 1;
+}
+
+
+.single_instractor .instractor_info .instractor_social p {
+    color: #fff;
+    background: #004533;
+    padding: 5px;
+    border-radius: 3px;
+    transition: .3s;
+}
+
+#back-top {
+  display: none;
+}
+
+.theme_mailChimp2 .form-control {
+	border: 1px solid #FFF;
+}
+footer.home_three_footer .copyright_area .footer_border {
+	border-top: 1px solid #fff;
+}
+.primary_input::placeholder {
+	color: rgba(240, 240, 240, 0.8);
+}
+.primary_textarea::placeholder {
+	color: rgba(240, 240, 240, 0.8);
+}
+.slicknav_btn {
+	top: -3px;
+}
+.theme_btn {
+	padding: 20px 28px;
+}
+.theme_line_btn {
+	padding: 20px 28px;
+}
+
+.dark-theme .header_area .header_topbar_area {
+	background: #1f2025;
+}
+.theme_dropdown .btn svg path {
+	fill: #FFF !important;
+}
+.dark-theme  footer.home_three_footer .main_footer_wrap .footer_widget .social__Links a {
+	background: #292B36;
+}
+.dark-theme  .dark-theme .slicknav_menu .slicknav_icon-bar {
+	background-color: var(--yellow) !important;
+}
+@media (max-width: 767.98px) {
+	.banner_area .banner_text h3 {
+	  font-size: 34px;
+	}
+}
+
+.ck-ditor-img img {
+    width: 100% !important;
+}
+
+.ck-ditor-img p,
+.ck-ditor-img h1,
+.ck-ditor-img h2,
+.ck-ditor-img h3,
+.ck-ditor-img h4,
+.ck-ditor-img h5,
+.ck-ditor-img h6,
+.ck-ditor-img span,
+.dark-theme .ck-ditor-img p,
+.dark-theme .ck-ditor-img h1,
+.dark-theme .ck-ditor-img h2,
+.dark-theme .ck-ditor-img h3,
+.dark-theme .ck-ditor-img h4,
+.dark-theme .ck-ditor-img h5,
+.dark-theme .ck-ditor-img h6,
+.dark-theme .ck-ditor-img span {
+    color: #555555;
+}
+
+.dark-theme .ck-ditor-img p,
+.dark-theme .ck-ditor-img h1,
+.dark-theme .ck-ditor-img h2,
+.dark-theme .ck-ditor-img h3,
+.dark-theme .ck-ditor-img h4,
+.dark-theme .ck-ditor-img h5,
+.dark-theme .ck-ditor-img h6,
+.dark-theme .ck-ditor-img span {
+    color: #FFFFFF !important;
+}
+
+.dark-theme p, .dark-theme .statement_info .statement_lists p, .dark-theme .explorer_tab_content .explorer_tab_description {
+    color: #FFFFFF !important;
+}
+.ck-ditor-img img{
+    margin-bottom: 20px;
+}
+
+.ck-ditor-img ul li{
+    list-style-type: disc;
+    margin-left: 15px !important;
+}
+
+.ck-ditor-img ul {
+    margin: 13px;
+    padding: 0px;
+}
+
+.ck-ditor-img ol li {
+    list-style: block;
+}
+
+/* Dream Tuition Academy — logo palette (dark #004533, accent #5cb82a) */
+:root {
+    --dream-green-dark: #004533;
+    --dream-green-accent: #5cb82a;
+    --dream-green-mid: #006b52;
+}
+
+/* Nav: active / hover use accent green (default link text stays dark green) */
+.header_area .main_menu ul li a:hover,
+.header_area .main_menu ul li a.active,
+.header_area .main_menu ul li.submenu_active > a {
+    color: var(--dream-green-accent) !important;
+}
+
+.header_area .main_menu ul li a:hover::before,
+.header_area .main_menu ul li a.active::before {
+    background: var(--dream-green-accent) !important;
+}
+
+/* Primary CTA buttons */
+.theme_btn {
+    background-color: var(--dream-green-dark) !important;
+    border-color: var(--dream-green-dark) !important;
+}
+
+.theme_btn:hover,
+.theme_btn_lite:hover {
+    color: var(--dream-green-dark) !important;
+    border-color: var(--dream-green-accent) !important;
+    background: transparent !important;
+}
+
+.theme_btn:hover svg path {
+    stroke: var(--dream-green-accent) !important;
+}
+
+.theme_line_btn:hover {
+    background-color: var(--dream-green-dark) !important;
+    border-color: var(--dream-green-dark) !important;
+}
+
+/* Hero slider dots */
+.owl-dots .owl-dot.active span {
+    background: var(--dream-green-accent) !important;
+}
+
+.owl-dots .owl-dot.active span::before {
+    border-color: var(--dream-green-accent) !important;
+}
+
+/* Counter / stats strip (replaces pink counter_bg.png) */
+.counter_area::before {
+    background-image: none !important;
+    background-color: var(--dream-green-dark) !important;
+}
+
+#back-top,
+.back-top {
+    background-color: var(--dream-green-dark) !important;
+}
+
+#back-top:hover,
+.back-top:hover {
+    background-color: var(--dream-green-accent) !important;
+}
+
+.whatsapp-float {
+    position: fixed;
+    left: 20px;
+    bottom: 30px;
+    z-index: 9999998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: #25d366;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.whatsapp-float:hover {
+    color: #fff;
+    transform: scale(1.06);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 575px) {
+    .whatsapp-float {
+        left: 16px;
+        bottom: 20px;
+        width: 50px;
+        height: 50px;
+    }
+}
+
+.theme_pagination a.active,
+.theme_pagination a:hover {
+    background: var(--dream-green-dark) !important;
+    border-color: var(--dream-green-dark) !important;
+    color: #fff !important;
+}
+
+/* Teacher cards — designation & qualification (always visible on overlay) */
+.single_instractor .teacher_card_meta {
+    text-align: center;
+}
+.single_instractor .teacher_card_meta p {
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.45;
+    margin: 0 0 8px;
+    padding: 0;
+    background: transparent;
+    opacity: 1;
+    transform: none;
+}
+.single_instractor .teacher_card_meta p span {
+    font-weight: 600;
+    opacity: 0.92;
+}
+.single_instractor .teacher_designation {
+    font-weight: 600;
+}
+
